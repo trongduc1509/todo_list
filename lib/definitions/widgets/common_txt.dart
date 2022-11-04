@@ -216,7 +216,6 @@ class CommonSearchTxt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       height: 48,
       decoration: BoxDecoration(
@@ -280,6 +279,69 @@ class CommonSearchTxt extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class CommonTextField extends StatelessWidget {
+  const CommonTextField(
+      {Key? key,
+      this.placeHolder,
+      this.suffixIcon,
+      this.controller,
+      this.txtSelected,
+      this.keyboardType,
+      this.suffixAction,
+      this.maxLines = 1,
+      this.onChanged,
+      this.focusNode})
+      : super(key: key);
+
+  final String? placeHolder;
+  final Icon? suffixIcon;
+  final TextEditingController? controller;
+  final Function()? txtSelected;
+  final Function()? suffixAction;
+  final TextInputType? keyboardType;
+  final int maxLines;
+  final ValueChanged<String>? onChanged;
+  final FocusNode? focusNode;
+
+  @override
+  Widget build(BuildContext context) {
+    return CommonField(
+      focusNode: focusNode,
+      maxLines: maxLines,
+      showCursor: txtSelected == null,
+      readOnly: txtSelected != null,
+      onTap: txtSelected,
+      controller: controller,
+      keyboardType: keyboardType,
+      textAlignVertical: TextAlignVertical.center,
+      textInputAction: TextInputAction.done,
+      padding: const EdgeInsets.all(7),
+      onChanged: onChanged,
+      decoration: InputDecoration(
+          border: InputBorder.none,
+          isDense: true,
+          hintText: placeHolder,
+          labelStyle: DefaultStyle()
+              .t16Regular
+              .apply(color: DefaultStyle().greyDisable),
+          suffixIconConstraints: suffixIcon != null
+              ? const BoxConstraints(minWidth: 0, minHeight: 0)
+              : null,
+          suffixIcon: suffixIcon != null
+              ? GestureDetector(
+                  child: suffixIcon,
+                  onTap: () {
+                    if (suffixAction != null) {
+                      suffixAction!();
+                    }
+                  },
+                )
+              : null),
+      style: DefaultStyle().t16Regular,
     );
   }
 }

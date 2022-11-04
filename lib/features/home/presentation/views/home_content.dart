@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list/definitions/colors.dart';
 import 'package:todo_list/features/add_task/presentation/views/add_task_page.dart';
@@ -7,7 +6,6 @@ import 'package:todo_list/features/home/presentation/widgets/task_tile.dart';
 import '../../../../definitions/helper/delay_timer.dart';
 import '../../../../definitions/widgets/appbar_panel.dart';
 import '../../../../definitions/widgets/common_txt.dart';
-import '../../../../definitions/widgets/nodata_view.dart';
 
 class HomeContent extends StatefulWidget {
   const HomeContent({Key? key}) : super(key: key);

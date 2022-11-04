@@ -2,9 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:todo_list/definitions/colors.dart';
 import 'package:todo_list/definitions/default.dart';
 import 'package:todo_list/definitions/dimesions.dart';
+import 'package:todo_list/definitions/widgets/common_txt.dart';
+import 'package:todo_list/definitions/widgets/date_picker.dart';
 
-class AddTaskContent extends StatelessWidget {
-  const AddTaskContent({Key? key}) : super(key: key);
+import '../../../../definitions/widgets/time_picker.dart';
+
+enum TaskDetailPageType { add, read, update }
+
+class AddTaskContent extends StatefulWidget {
+  const AddTaskContent({
+    Key? key,
+    this.pageType = TaskDetailPageType.add,
+  }) : super(key: key);
+
+  final TaskDetailPageType pageType;
+
+  @override
+  State<AddTaskContent> createState() => _AddTaskContentState();
+}
+
+class _AddTaskContentState extends State<AddTaskContent> {
+  final _titleController = TextEditingController();
+  final _noteController = TextEditingController();
+  DateTime? _startDate;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -45,6 +65,95 @@ class AddTaskContent extends StatelessWidget {
                 const SizedBox(
                   height: smallSpacing10,
                 ),
+                CommonTextField(
+                  placeHolder: 'Enter title here.',
+                  controller: _titleController,
+                ),
+                const SizedBox(
+                  height: spaceBetweenLine15,
+                ),
+                Text(
+                  'Note',
+                  style: DefaultStyle().t16Bold,
+                ),
+                const SizedBox(
+                  height: smallSpacing10,
+                ),
+                CommonTextField(
+                  placeHolder: 'Enter note here.',
+                  controller: _noteController,
+                  maxLines: 5,
+                ),
+                const SizedBox(
+                  height: spaceBetweenLine15,
+                ),
+                Text(
+                  'Date',
+                  style: DefaultStyle().t16Bold,
+                ),
+                const SizedBox(
+                  height: smallSpacing10,
+                ),
+                DatePickerView(
+                  active: true,
+                  date: _startDate,
+                  title: 'Choose start date',
+                  onDateChosen: (selectedDate) {
+                    setState(() {
+                      _startDate = selectedDate;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: spaceBetweenLine15,
+                ),
+                Text(
+                  'Start time',
+                  style: DefaultStyle().t16Bold,
+                ),
+                const SizedBox(
+                  height: smallSpacing10,
+                ),
+                TimePickerView(
+                  active: true,
+                  time: _startDate,
+                  title: 'Choose start time',
+                  onTimeChosen: (selectedTime) {
+                    setState(() {
+                      _startDate = selectedTime;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: spaceBetweenLine15,
+                ),
+                Text(
+                  'Remind',
+                  style: DefaultStyle().t16Bold,
+                ),
+                const SizedBox(
+                  height: smallSpacing10,
+                ),
+                Text(
+                  '*10 minutes early',
+                  style: DefaultStyle().t16Bold.copyWith(
+                        color: AppColor().onError,
+                      ),
+                ),
+                const SizedBox(
+                  height: spaceBetweenLine15,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: SizedBox(
+                    width: 120.0,
+                    child: ElevatedButton(
+                      child: const Text('Create task'),
+                      style: DefaultStyle().progressButton,
+                      onPressed: () {},
+                    ),
+                  ),
+                )
               ],
             ),
           ),
