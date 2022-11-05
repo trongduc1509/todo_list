@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as p;
 import 'package:todo_list/definitions/enum/filter.dart';
+import 'package:todo_list/definitions/helper/time.dart';
 
 import '../models/task_model.dart';
 
@@ -38,7 +39,7 @@ class TaskDatabase {
       ${TaskFields.id} $idType,
       ${TaskFields.title} $titleType,
       ${TaskFields.note} $noteType,
-      ${TaskFields.startTime} $timeType,
+      ${TaskFields.dueTime} $timeType,
       ${TaskFields.isCompleted} $isCompletedType)''');
   }
 
@@ -90,9 +91,9 @@ class TaskDatabase {
     List<Map<String, Object?>> result = await dtb.query(
       tableTask,
       where:
-          '(${TaskFields.title} LIKE ? OR ${TaskFields.note} LIKE ?) ${filterBy != FilterBy.all ? (filterBy == FilterBy.today ? 'AND datediff(${TaskFields.startTime}, now()) == 0' : 'AND AND datediff(${TaskFields.startTime}, now()) > 0') : ''}',
+          '(${TaskFields.title} LIKE ? OR ${TaskFields.note} LIKE ?) ${filterBy != FilterBy.all ? filterBy == FilterBy.today ? 'AND date(${TaskFields.dueTime}) >= date("now", "localtime") AND date(${TaskFields.dueTime}) <= date("now", "start of day", "+1 day")' : 'AND (date(${TaskFields.dueTime}) >= date("now", "localtime")) AND ${TaskFields.isCompleted} == 0' : ''}',
       whereArgs: ['%$searchStr%', '%$searchStr%'],
-      orderBy: '${TaskFields.startTime} ASC',
+      orderBy: '${TaskFields.dueTime} ASC',
     );
 
     final convertedResult = result.map((e) => Task.fromJSON(e)).toList();

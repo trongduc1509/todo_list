@@ -7,14 +7,14 @@ class TaskFields {
     id,
     title,
     note,
-    startTime,
+    dueTime,
     isCompleted,
   ];
 
   static const String id = '_id';
   static const String title = 'title';
   static const String note = 'note';
-  static const String startTime = 'start_time';
+  static const String dueTime = 'due_time';
   static const String isCompleted = 'is_completed';
 }
 
@@ -22,14 +22,14 @@ class Task {
   final int? id;
   final String title;
   final String note;
-  final DateTime? startTime;
+  final DateTime? dueTime;
   final bool isCompleted;
 
   Task({
     this.id,
     required this.title,
     required this.note,
-    required this.startTime,
+    required this.dueTime,
     this.isCompleted = false,
   });
 
@@ -37,7 +37,7 @@ class Task {
         id: map[TaskFields.id] as int?,
         title: map[TaskFields.title] as String,
         note: map[TaskFields.note] as String,
-        startTime: jsonToTime(map[TaskFields.startTime] as String),
+        dueTime: jsonToTime(map[TaskFields.dueTime] as String),
         isCompleted: (map[TaskFields.isCompleted] as int) == 1,
       );
 
@@ -45,13 +45,13 @@ class Task {
           {int? id,
           String? title,
           String? note,
-          DateTime? startTime,
+          DateTime? dueTime,
           bool? isCompleted}) =>
       Task(
         id: id ?? this.id,
         title: title ?? this.title,
         note: note ?? this.note,
-        startTime: startTime ?? this.startTime,
+        dueTime: dueTime ?? this.dueTime,
         isCompleted: isCompleted ?? this.isCompleted,
       );
 
@@ -59,7 +59,7 @@ class Task {
         TaskFields.id: id,
         TaskFields.title: title,
         TaskFields.note: note,
-        TaskFields.startTime: timeToJson(startTime),
-        TaskFields.isCompleted: isCompleted ? 1 : 0,
+        TaskFields.dueTime: timeToJson(dueTime),
+        TaskFields.isCompleted: isCompleted == true ? 1 : 0,
       };
 }

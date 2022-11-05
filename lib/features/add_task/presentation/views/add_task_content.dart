@@ -11,7 +11,6 @@ import '../../../../definitions/widgets/time_picker.dart';
 import '../../../../models/task_model.dart';
 import '../blocs/task_info/task_info_bloc.dart';
 import '../blocs/task_info/task_info_state.dart';
-import 'add_task_page.dart';
 
 class AddTaskContent extends StatefulWidget {
   const AddTaskContent({
@@ -25,7 +24,6 @@ class AddTaskContent extends StatefulWidget {
 class _AddTaskContentState extends State<AddTaskContent> {
   final _titleController = TextEditingController();
   final _noteController = TextEditingController();
-  DateTime? _startDate;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -99,7 +97,7 @@ class _AddTaskContentState extends State<AddTaskContent> {
                       height: spaceBetweenLine15,
                     ),
                     Text(
-                      'Date',
+                      'Due Date',
                       style: DefaultStyle().t16Bold,
                     ),
                     const SizedBox(
@@ -107,8 +105,8 @@ class _AddTaskContentState extends State<AddTaskContent> {
                     ),
                     DatePickerView(
                       active: state.detail?.isCompleted != true,
-                      date: state.selectedStartTime,
-                      title: 'Choose start date',
+                      date: state.selectedDueTime,
+                      title: 'Choose due date',
                       onDateChosen: (selectedDate) {
                         context.read<TaskInfoBloc>().add(
                             TaskInfoUpdateStartTimeFieldEvent(
@@ -121,7 +119,7 @@ class _AddTaskContentState extends State<AddTaskContent> {
                       height: spaceBetweenLine15,
                     ),
                     Text(
-                      'Start time',
+                      'Due time',
                       style: DefaultStyle().t16Bold,
                     ),
                     const SizedBox(
@@ -129,8 +127,8 @@ class _AddTaskContentState extends State<AddTaskContent> {
                     ),
                     TimePickerView(
                       active: state.detail?.isCompleted != true,
-                      time: state.selectedStartTime,
-                      title: 'Choose start time',
+                      time: state.selectedDueTime,
+                      title: 'Choose due time',
                       onTimeChosen: (selectedTime) {
                         context.read<TaskInfoBloc>().add(
                             TaskInfoUpdateStartTimeFieldEvent(
@@ -158,37 +156,38 @@ class _AddTaskContentState extends State<AddTaskContent> {
                     const SizedBox(
                       height: spaceBetweenLine15,
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: SizedBox(
-                        width: 120.0,
-                        child: ElevatedButton(
-                          child: Text(
-                              state.isCreating ? 'Create task' : 'Edit task'),
-                          style: DefaultStyle().progressButton,
-                          onPressed: () {
-                            state.isCreating
-                                ? context
-                                    .read<TaskInfoBloc>()
-                                    .add(TaskInfoCreateEvent(
-                                        newTask: Task(
-                                      title: _titleController.text.trim(),
-                                      note: _noteController.text.trim(),
-                                      startTime: state.selectedStartTime,
-                                    )))
-                                : context
-                                    .read<TaskInfoBloc>()
-                                    .add(TaskInfoUpdateEvent(
-                                        updateTask: Task(
-                                      id: state.detail?.id,
-                                      title: _titleController.text.trim(),
-                                      note: _noteController.text.trim(),
-                                      startTime: state.selectedStartTime,
-                                    )));
-                          },
+                    if (state.detail?.isCompleted != true)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: SizedBox(
+                          width: 120.0,
+                          child: ElevatedButton(
+                            child: Text(
+                                state.isCreating ? 'Create task' : 'Edit task'),
+                            style: DefaultStyle().progressButton,
+                            onPressed: () {
+                              state.isCreating
+                                  ? context
+                                      .read<TaskInfoBloc>()
+                                      .add(TaskInfoCreateEvent(
+                                          newTask: Task(
+                                        title: _titleController.text.trim(),
+                                        note: _noteController.text.trim(),
+                                        dueTime: state.selectedDueTime,
+                                      )))
+                                  : context
+                                      .read<TaskInfoBloc>()
+                                      .add(TaskInfoUpdateEvent(
+                                          updateTask: Task(
+                                        id: state.detail?.id,
+                                        title: _titleController.text.trim(),
+                                        note: _noteController.text.trim(),
+                                        dueTime: state.selectedDueTime,
+                                      )));
+                            },
+                          ),
                         ),
-                      ),
-                    )
+                      )
                   ],
                 ),
               ),

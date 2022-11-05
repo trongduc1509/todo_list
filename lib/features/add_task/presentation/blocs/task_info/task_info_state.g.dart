@@ -15,7 +15,7 @@ abstract class _$TaskInfoStateCWProxy {
 
   TaskInfoState isLoading(bool isLoading);
 
-  TaskInfoState selectedStartTime(DateTime? selectedStartTime);
+  TaskInfoState selectedDueTime(DateTime? selectedDueTime);
 
   TaskInfoState tempNote(String? tempNote);
 
@@ -32,7 +32,7 @@ abstract class _$TaskInfoStateCWProxy {
     int? inititalId,
     bool? isCreating,
     bool? isLoading,
-    DateTime? selectedStartTime,
+    DateTime? selectedDueTime,
     String? tempNote,
     String? tempTitle,
   });
@@ -57,8 +57,8 @@ class _$TaskInfoStateCWProxyImpl implements _$TaskInfoStateCWProxy {
   TaskInfoState isLoading(bool isLoading) => this(isLoading: isLoading);
 
   @override
-  TaskInfoState selectedStartTime(DateTime? selectedStartTime) =>
-      this(selectedStartTime: selectedStartTime);
+  TaskInfoState selectedDueTime(DateTime? selectedDueTime) =>
+      this(selectedDueTime: selectedDueTime);
 
   @override
   TaskInfoState tempNote(String? tempNote) => this(tempNote: tempNote);
@@ -79,7 +79,7 @@ class _$TaskInfoStateCWProxyImpl implements _$TaskInfoStateCWProxy {
     Object? inititalId = const $CopyWithPlaceholder(),
     Object? isCreating = const $CopyWithPlaceholder(),
     Object? isLoading = const $CopyWithPlaceholder(),
-    Object? selectedStartTime = const $CopyWithPlaceholder(),
+    Object? selectedDueTime = const $CopyWithPlaceholder(),
     Object? tempNote = const $CopyWithPlaceholder(),
     Object? tempTitle = const $CopyWithPlaceholder(),
   }) {
@@ -101,10 +101,10 @@ class _$TaskInfoStateCWProxyImpl implements _$TaskInfoStateCWProxy {
           ? _value.isLoading
           // ignore: cast_nullable_to_non_nullable
           : isLoading as bool,
-      selectedStartTime: selectedStartTime == const $CopyWithPlaceholder()
-          ? _value.selectedStartTime
+      selectedDueTime: selectedDueTime == const $CopyWithPlaceholder()
+          ? _value.selectedDueTime
           // ignore: cast_nullable_to_non_nullable
-          : selectedStartTime as DateTime?,
+          : selectedDueTime as DateTime?,
       tempNote: tempNote == const $CopyWithPlaceholder()
           ? _value.tempNote
           // ignore: cast_nullable_to_non_nullable

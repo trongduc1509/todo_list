@@ -12,7 +12,7 @@ class TaskInfoState extends Equatable {
     this.detail,
     this.tempTitle,
     this.tempNote,
-    this.selectedStartTime,
+    this.selectedDueTime,
     this.isLoading = true,
     this.isCreating = true,
   });
@@ -21,7 +21,7 @@ class TaskInfoState extends Equatable {
   final Task? detail;
   final String? tempTitle;
   final String? tempNote;
-  final DateTime? selectedStartTime;
+  final DateTime? selectedDueTime;
   final bool isLoading;
   final bool isCreating;
 
@@ -31,7 +31,7 @@ class TaskInfoState extends Equatable {
         detail,
         tempTitle,
         tempNote,
-        selectedStartTime,
+        selectedDueTime,
         isLoading,
         isCreating,
       ];

@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todo_list/definitions/colors.dart';
+import 'package:todo_list/definitions/util/notifier.dart';
 import 'package:todo_list/features/add_task/presentation/views/add_task_page.dart';
 import 'package:todo_list/features/home/presentation/blocs/tasks_list/tasks_list_event.dart';
 import 'package:todo_list/features/home/presentation/widgets/task_tile.dart';
+import 'package:todo_list/models/task_model.dart';
 
+import '../../../../definitions/enum/filter.dart';
 import '../../../../definitions/helper/delay_timer.dart';
 import '../../../../definitions/widgets/appbar_panel.dart';
 import '../../../../definitions/widgets/common_txt.dart';
@@ -29,16 +33,6 @@ class _HomeContentState extends State<HomeContent> {
   @override
   void initState() {
     super.initState();
-    // _scrollController.addListener(() {
-    //   if (_scrollController.position.atEdge) {
-    //     var isTop = _scrollController.position.pixels == 0;
-    //     if (!isTop) {
-    //       mContext
-    //           .read<WaitingConfirmDatLeBloc>()
-    //           .add(const WaitingConfirmDatLeLoadMore());
-    //     }
-    //   }
-    // });
   }
 
   @override
@@ -105,7 +99,24 @@ class _HomeContentState extends State<HomeContent> {
                             fit: BoxFit.fitWidth,
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Notifier.showCheckBottomSheet(
+                            context,
+                            title: 'Filter',
+                            listData: FilterBy.values
+                                .map((e) => e.statusFilterBy)
+                                .toList(),
+                            selectedIndex: state.filterBy?.id,
+                            onSelected: (indexFilter) {
+                              context
+                                  .read<TasksListBloc>()
+                                  .add(TasksListLoadEvent(
+                                    searchStr: txt.text.trim(),
+                                    filterBy: filterById(indexFilter),
+                                  ));
+                            },
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -117,38 +128,133 @@ class _HomeContentState extends State<HomeContent> {
                 : RefreshIndicator(
                     onRefresh: pullRefresh,
                     child: (state.tasksList?.isNotEmpty ?? false)
-                        ? SingleChildScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            //controller: _scrollController,
-                            child: Column(
-                              children: [
-                                ListView.separated(
-                                  padding: const EdgeInsets.only(
-                                      left: 16.0, right: 16.0, top: 12.0),
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: state.tasksList?.length ?? 0,
-                                  separatorBuilder: (context, index) =>
-                                      const SizedBox(
-                                    height: 10.0,
+                        ? NotificationListener<OverscrollIndicatorNotification>(
+                            onNotification:
+                                (OverscrollIndicatorNotification overscroll) {
+                              overscroll.disallowIndicator();
+                              return true;
+                            },
+                            child: SingleChildScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              //controller: _scrollController,
+                              child: Column(
+                                children: [
+                                  ListView.separated(
+                                    padding: const EdgeInsets.only(
+                                        left: 16.0, right: 16.0, top: 12.0),
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: state.tasksList?.length ?? 0,
+                                    separatorBuilder: (context, index) =>
+                                        const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    itemBuilder: (context, index) =>
+                                        GestureDetector(
+                                      onTap: () async {
+                                        await Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AddTaskPage(
+                                                        id: state
+                                                            .tasksList?[index]
+                                                            .id)));
+                                        pullRefresh();
+                                      },
+                                      child: Slidable(
+                                        endActionPane: ActionPane(
+                                          motion: const DrawerMotion(),
+                                          children: [
+                                            SlidableAction(
+                                              onPressed: (context) {
+                                                mContext.read<TasksListBloc>().add(
+                                                    TasksListUpdateCompletedSingleEvent(
+                                                        updateTask: state
+                                                                .tasksList?[
+                                                                    index]
+                                                                .copy(
+                                                                    isCompleted:
+                                                                        true) ??
+                                                            Task(
+                                                              title: '',
+                                                              note: '',
+                                                              dueTime: DateTime
+                                                                  .now(),
+                                                            )));
+                                              },
+                                              backgroundColor: Colors.green,
+                                              foregroundColor: Colors.white,
+                                              icon: Icons.check_circle_rounded,
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            SlidableAction(
+                                              onPressed: (context) {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        title: const Text(
+                                                            'Confirm your deletion'),
+                                                        content: const Text(
+                                                            'Your task will be deleted permanently! Do you want to do it?'),
+                                                        actions: [
+                                                          TextButton(
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: const Text(
+                                                                  'CANCEL')),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              mContext
+                                                                  .read<
+                                                                      TasksListBloc>()
+                                                                  .add(TasksListRemoveTaskEvent(
+                                                                      delTask: state
+                                                                              .tasksList?[
+                                                                          index]));
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: const Text(
+                                                                'CONFIRM'),
+                                                          )
+                                                        ],
+                                                      );
+                                                    });
+                                              },
+                                              backgroundColor:
+                                                  const Color(0xFFFE4A49),
+                                              foregroundColor: Colors.white,
+                                              icon: Icons.delete,
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                          ],
+                                        ),
+                                        child: TaskTile(
+                                          task: state.tasksList?[index],
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  itemBuilder: (context, index) => TaskTile(
-                                    task: state.tasksList?[index],
+                                  // if (state.showLoadding)
+                                  //   const SizedBox(
+                                  //     height: 40,
+                                  //     child: CupertinoActivityIndicator(),
+                                  //   ),
+                                  // if (!state.showLoadding)
+                                  //   const SizedBox(
+                                  //     height: 40,
+                                  //   )
+                                  const SizedBox(
+                                    height: 40,
                                   ),
-                                ),
-                                // if (state.showLoadding)
-                                //   const SizedBox(
-                                //     height: 40,
-                                //     child: CupertinoActivityIndicator(),
-                                //   ),
-                                // if (!state.showLoadding)
-                                //   const SizedBox(
-                                //     height: 40,
-                                //   )
-                                const SizedBox(
-                                  height: 40,
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           )
                         : Container(

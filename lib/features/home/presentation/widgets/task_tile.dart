@@ -45,7 +45,7 @@ class TaskTile extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    task?.startTime?.convertDate('dd/MM/yyyy HH:mm') ?? '',
+                    task?.dueTime?.convertDate('dd/MM/yyyy HH:mm') ?? '',
                     style: const TextStyle(
                       fontSize: 13,
                       color: Colors.black,
@@ -70,11 +70,11 @@ class TaskTile extends StatelessWidget {
           width: 1.0,
           color: Colors.grey[200]!.withOpacity(0.7),
         ),
-        const RotatedBox(
+        RotatedBox(
           quarterTurns: 3,
           child: Text(
-            "TODO",
-            style: TextStyle(
+            task?.isCompleted == true ? 'COMPLETED' : 'TODO',
+            style: const TextStyle(
                 fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black),
           ),
         ),

@@ -29,11 +29,15 @@ class TaskInfoBloc extends Bloc<TaskInfoEvent, TaskInfoState> {
     var detailTask = await taskdb.readTask(event.taskId);
     emit(state.copyWith(
       detail: detailTask,
+      tempTitle: detailTask.title,
+      tempNote: detailTask.note,
+      selectedDueTime: detailTask.dueTime,
       isLoading: false,
     ));
   }
 
   void _taskInfoUpdate(TaskInfoUpdateEvent event, emit) async {
+    if (event.updateTask.id == null) return;
     final taskdb = TaskDatabase();
     var updatedTask = await taskdb.updateTask(event.updateTask);
 
@@ -49,7 +53,7 @@ class TaskInfoBloc extends Bloc<TaskInfoEvent, TaskInfoState> {
     emit(state.copyWith(
       tempTitle: event.tempTitle,
       tempNote: event.tempNote,
-      selectedStartTime: event.newTime,
+      selectedDueTime: event.newTime,
     ));
   }
 }
