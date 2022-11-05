@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../../../models/task_model.dart';
+import '../../../../definitions/helper/time.dart';
+
 class TaskTile extends StatelessWidget {
-  const TaskTile({Key? key}) : super(key: key);
+  const TaskTile({
+    Key? key,
+    required this.task,
+  }) : super(key: key);
+
+  final Task? task;
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +19,7 @@ class TaskTile extends StatelessWidget {
         vertical: 12.0,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: task?.isCompleted ?? false ? Colors.green : Colors.white,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Row(children: [
@@ -19,8 +27,8 @@ class TaskTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Task title",
-                  style: TextStyle(
+              Text(task?.title ?? '',
+                  style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.black)),
@@ -36,9 +44,9 @@ class TaskTile extends StatelessWidget {
                     size: 18,
                   ),
                   const SizedBox(width: 4),
-                  const Text(
-                    "startime - endtime",
-                    style: TextStyle(
+                  Text(
+                    task?.startTime?.convertDate('dd/MM/yyyy HH:mm') ?? '',
+                    style: const TextStyle(
                       fontSize: 13,
                       color: Colors.black,
                     ),
@@ -46,9 +54,9 @@ class TaskTile extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              const Text(
-                "task note",
-                style: TextStyle(
+              Text(
+                task?.note ?? '',
+                style: const TextStyle(
                   fontSize: 15,
                   color: Colors.black,
                 ),
