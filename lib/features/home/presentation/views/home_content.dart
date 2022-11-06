@@ -8,6 +8,7 @@ import 'package:todo_list/features/add_task/presentation/views/add_task_page.dar
 import 'package:todo_list/features/home/presentation/blocs/tasks_list/tasks_list_event.dart';
 import 'package:todo_list/features/home/presentation/widgets/task_tile.dart';
 import 'package:todo_list/models/task_model.dart';
+import 'package:todo_list/services/local_noti_service.dart';
 
 import '../../../../definitions/enum/filter.dart';
 import '../../../../definitions/helper/delay_timer.dart';
@@ -166,29 +167,44 @@ class _HomeContentState extends State<HomeContent> {
                                         endActionPane: ActionPane(
                                           motion: const DrawerMotion(),
                                           children: [
-                                            SlidableAction(
-                                              onPressed: (context) {
-                                                mContext.read<TasksListBloc>().add(
-                                                    TasksListUpdateCompletedSingleEvent(
-                                                        updateTask: state
-                                                                .tasksList?[
+                                            if (state.tasksList?[index]
+                                                    .isCompleted !=
+                                                true)
+                                              SlidableAction(
+                                                onPressed: (context) {
+                                                  mContext.read<TasksListBloc>().add(
+                                                      TasksListUpdateCompletedSingleEvent(
+                                                          updateTask: state
+                                                                  .tasksList?[
+                                                                      index]
+                                                                  .copy(
+                                                                      isCompleted:
+                                                                          true) ??
+                                                              Task(
+                                                                title: '',
+                                                                note: '',
+                                                                dueTime:
+                                                                    DateTime
+                                                                        .now(),
+                                                              )));
+                                                  if (state.tasksList?[index]
+                                                          .id !=
+                                                      null) {
+                                                    LocalNotiService
+                                                        .cancelIdentifiedNoti(
+                                                            state
+                                                                .tasksList![
                                                                     index]
-                                                                .copy(
-                                                                    isCompleted:
-                                                                        true) ??
-                                                            Task(
-                                                              title: '',
-                                                              note: '',
-                                                              dueTime: DateTime
-                                                                  .now(),
-                                                            )));
-                                              },
-                                              backgroundColor: Colors.green,
-                                              foregroundColor: Colors.white,
-                                              icon: Icons.check_circle_rounded,
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                            ),
+                                                                .id!);
+                                                  }
+                                                },
+                                                backgroundColor: Colors.green,
+                                                foregroundColor: Colors.white,
+                                                icon:
+                                                    Icons.check_circle_rounded,
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
                                             SlidableAction(
                                               onPressed: (context) {
                                                 showDialog(
@@ -216,6 +232,17 @@ class _HomeContentState extends State<HomeContent> {
                                                                       delTask: state
                                                                               .tasksList?[
                                                                           index]));
+                                                              if (state
+                                                                      .tasksList?[
+                                                                          index]
+                                                                      .id !=
+                                                                  null) {
+                                                                LocalNotiService
+                                                                    .cancelIdentifiedNoti(state
+                                                                        .tasksList![
+                                                                            index]
+                                                                        .id!);
+                                                              }
                                                               Navigator.pop(
                                                                   context);
                                                             },

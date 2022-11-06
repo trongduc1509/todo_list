@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_list/db/tasks_database.dart';
 import 'package:todo_list/definitions/enum/filter.dart';
+import 'package:todo_list/services/local_noti_service.dart';
 
 import '../../../../../models/task_model.dart';
 import 'tasks_list_event.dart';
@@ -64,6 +65,7 @@ class TasksListBloc extends Bloc<TasksListEvent, TasksListState> {
     final taskdb = TaskDatabase();
     if (event.delTask != null && event.delTask!.id != null) {
       await taskdb.deleteTask(event.delTask!.id!);
+      LocalNotiService.cancelIdentifiedNoti(event.delTask!.id!);
     }
     add(const TasksListLoadEvent());
   }

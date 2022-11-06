@@ -219,6 +219,16 @@ class _AddTaskContentState extends State<AddTaskContent> {
                                         desctipion:
                                             'Please select the due date after current date&time!');
                                   }
+                                  if (state.selectedDueTime!
+                                          .difference(DateTime.now())
+                                          .inMinutes <=
+                                      10) {
+                                    return Notifier.showToast(context,
+                                        isError: true,
+                                        title: 'Error',
+                                        desctipion:
+                                            'Please select the due date after current date&time at lease 10 minutes!');
+                                  }
                                   context
                                       .read<TaskInfoBloc>()
                                       .add(TaskInfoCreateEvent(
@@ -257,6 +267,16 @@ class _AddTaskContentState extends State<AddTaskContent> {
                                         title: 'Error',
                                         desctipion:
                                             'Please select the due date after current date&time!');
+                                  }
+                                  if (state.selectedDueTime!
+                                          .difference(DateTime.now())
+                                          .inMinutes <=
+                                      10) {
+                                    return Notifier.showToast(context,
+                                        isError: true,
+                                        title: 'Error',
+                                        desctipion:
+                                            'Please select the due date after current date&time at lease 10 minutes!');
                                   }
                                   context
                                       .read<TaskInfoBloc>()

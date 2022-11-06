@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/definitions/dimesions.dart';
+import 'package:todo_list/services/local_noti_service.dart';
 
 import '../../../../models/task_model.dart';
 import '../../../../definitions/helper/time.dart';
@@ -14,6 +15,10 @@ class TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (task?.isCompleted != true) {
+      LocalNotiService.showScheduledNotification(
+          id: task!.id!, title: task?.title, scheduledTime: task!.dueTime!);
+    }
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,

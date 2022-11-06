@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_list/db/tasks_database.dart';
+import 'package:todo_list/services/local_noti_service.dart';
 import 'task_info_event.dart';
 import 'task_info_state.dart';
 
@@ -19,6 +20,8 @@ class TaskInfoBloc extends Bloc<TaskInfoEvent, TaskInfoState> {
   void _taskInfoCreate(TaskInfoCreateEvent event, emit) async {
     final taskdb = TaskDatabase();
     var newTask = await taskdb.createTask(event.newTask);
+    LocalNotiService.showScheduledNotification(
+        id: newTask.id!, title: newTask.title, scheduledTime: newTask.dueTime!);
     emit(state.copyWith(
       detail: newTask,
       isCreating: false,

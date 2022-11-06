@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/services/local_noti_service.dart';
 
 import 'features/home/presentation/views/home_page.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await LocalNotiService.initialize(isScheduled: true);
   runApp(const MyApp());
 }
 
