@@ -91,7 +91,7 @@ class TaskDatabase {
     List<Map<String, Object?>> result = await dtb.query(
       tableTask,
       where:
-          '(${TaskFields.title} LIKE ? OR ${TaskFields.note} LIKE ?) ${filterBy != FilterBy.all ? filterBy == FilterBy.today ? 'AND date(${TaskFields.dueTime}) >= date("now", "localtime") AND date(${TaskFields.dueTime}) <= date("now", "start of day", "+1 day")' : 'AND (date(${TaskFields.dueTime}) >= date("now", "localtime")) AND ${TaskFields.isCompleted} == 0' : ''}',
+          '(${TaskFields.title} LIKE ? OR ${TaskFields.note} LIKE ?) ${filterBy != FilterBy.all ? filterBy == FilterBy.today ? 'AND date(${TaskFields.dueTime}) >= date("now", "localtime") AND date(${TaskFields.dueTime}) <= date("now", "localtime", "start of day", "+1 day")' : 'AND (date(${TaskFields.dueTime}) >= date("now", "localtime")) AND ${TaskFields.isCompleted} == 0' : ''}',
       whereArgs: ['%$searchStr%', '%$searchStr%'],
       orderBy: '${TaskFields.dueTime} ASC',
     );

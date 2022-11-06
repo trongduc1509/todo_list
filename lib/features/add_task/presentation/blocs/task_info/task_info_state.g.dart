@@ -7,6 +7,8 @@ part of 'task_info_state.dart';
 // **************************************************************************
 
 abstract class _$TaskInfoStateCWProxy {
+  TaskInfoState dataFilled(bool dataFilled);
+
   TaskInfoState detail(Task? detail);
 
   TaskInfoState inititalId(int? inititalId);
@@ -28,6 +30,7 @@ abstract class _$TaskInfoStateCWProxy {
   /// TaskInfoState(...).copyWith(id: 12, name: "My name")
   /// ````
   TaskInfoState call({
+    bool? dataFilled,
     Task? detail,
     int? inititalId,
     bool? isCreating,
@@ -43,6 +46,9 @@ class _$TaskInfoStateCWProxyImpl implements _$TaskInfoStateCWProxy {
   final TaskInfoState _value;
 
   const _$TaskInfoStateCWProxyImpl(this._value);
+
+  @override
+  TaskInfoState dataFilled(bool dataFilled) => this(dataFilled: dataFilled);
 
   @override
   TaskInfoState detail(Task? detail) => this(detail: detail);
@@ -75,6 +81,7 @@ class _$TaskInfoStateCWProxyImpl implements _$TaskInfoStateCWProxy {
   /// TaskInfoState(...).copyWith(id: 12, name: "My name")
   /// ````
   TaskInfoState call({
+    Object? dataFilled = const $CopyWithPlaceholder(),
     Object? detail = const $CopyWithPlaceholder(),
     Object? inititalId = const $CopyWithPlaceholder(),
     Object? isCreating = const $CopyWithPlaceholder(),
@@ -84,6 +91,11 @@ class _$TaskInfoStateCWProxyImpl implements _$TaskInfoStateCWProxy {
     Object? tempTitle = const $CopyWithPlaceholder(),
   }) {
     return TaskInfoState(
+      dataFilled:
+          dataFilled == const $CopyWithPlaceholder() || dataFilled == null
+              ? _value.dataFilled
+              // ignore: cast_nullable_to_non_nullable
+              : dataFilled as bool,
       detail: detail == const $CopyWithPlaceholder()
           ? _value.detail
           // ignore: cast_nullable_to_non_nullable

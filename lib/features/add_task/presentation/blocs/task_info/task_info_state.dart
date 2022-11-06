@@ -15,6 +15,7 @@ class TaskInfoState extends Equatable {
     this.selectedDueTime,
     this.isLoading = true,
     this.isCreating = true,
+    this.dataFilled = false,
   });
 
   final int? inititalId;
@@ -24,6 +25,7 @@ class TaskInfoState extends Equatable {
   final DateTime? selectedDueTime;
   final bool isLoading;
   final bool isCreating;
+  final bool dataFilled;
 
   @override
   List<Object?> get props => [
@@ -34,5 +36,6 @@ class TaskInfoState extends Equatable {
         selectedDueTime,
         isLoading,
         isCreating,
+        dataFilled,
       ];
 }

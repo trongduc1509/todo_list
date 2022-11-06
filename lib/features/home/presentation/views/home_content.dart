@@ -264,8 +264,8 @@ class _HomeContentState extends State<HomeContent> {
                             child: SingleChildScrollView(
                               child: NodataView(
                                 description: (txt.text != '')
-                                    ? 'Chưa tìm thấy kết quả bạn cần rồi.\nHãy thử lại nhé!'
-                                    : 'Không có dữ liệu!',
+                                    ? 'No result match your searching.\nPlease try again!'
+                                    : 'No data!',
                                 bgColor: AppColor().backgroundHome,
                               ),
                             ),

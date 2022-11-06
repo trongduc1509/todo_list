@@ -46,8 +46,8 @@ class TaskInfoDeleteEvent extends TaskInfoEvent {
   final Task deleteTask;
 }
 
-class TaskInfoUpdateStartTimeFieldEvent extends TaskInfoEvent {
-  const TaskInfoUpdateStartTimeFieldEvent({
+class TaskInfoUpdateFieldEvent extends TaskInfoEvent {
+  const TaskInfoUpdateFieldEvent({
     required this.tempTitle,
     required this.tempNote,
     required this.newTime,
@@ -57,3 +57,5 @@ class TaskInfoUpdateStartTimeFieldEvent extends TaskInfoEvent {
   final String tempNote;
   final DateTime newTime;
 }
+
+class TaskInfoDataFilledEvent extends TaskInfoEvent {}

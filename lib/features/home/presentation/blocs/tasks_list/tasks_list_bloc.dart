@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_list/db/tasks_database.dart';
 import 'package:todo_list/definitions/enum/filter.dart';
 
+import '../../../../../models/task_model.dart';
 import 'tasks_list_event.dart';
 import 'tasks_list_state.dart';
 
@@ -22,8 +23,31 @@ class TasksListBloc extends Bloc<TasksListEvent, TasksListState> {
         event.searchStr ?? state.searchStr ?? '',
         event.filterBy ?? state.filterBy ?? FilterBy.all);
 
+    var checkedList = <Task>[];
+    var compareDate = DateTime.now();
+    if (event.filterBy == FilterBy.today) {
+      for (Task e in result) {
+        if (e.dueTime!.compareTo(DateTime(
+                    compareDate.year, compareDate.month, compareDate.day)) >=
+                0 &&
+            e.dueTime!.compareTo(DateTime(compareDate.year, compareDate.month,
+                    compareDate.day, 23, 59, 59)) <=
+                0) {
+          checkedList.add(e);
+        }
+      }
+    } else if (event.filterBy == FilterBy.upcoming) {
+      for (Task e in result) {
+        if (e.dueTime!.compareTo(compareDate) > 0) {
+          checkedList.add(e);
+        }
+      }
+    }
+
     emit(state.copyWith(
-      tasksList: result,
+      tasksList: (event.filterBy != null && event.filterBy! != FilterBy.all)
+          ? checkedList
+          : result,
       searchStr: event.searchStr ?? state.searchStr ?? '',
       filterBy: event.filterBy ?? state.filterBy ?? FilterBy.all,
       isLoading: false,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/definitions/dimesions.dart';
 
 import '../../../../models/task_model.dart';
 import '../../../../definitions/helper/time.dart';
@@ -33,7 +34,7 @@ class TaskTile extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: Colors.black)),
               const SizedBox(
-                height: 12,
+                height: spaceBetweenLine12,
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,7 +54,9 @@ class TaskTile extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(
+                height: spaceBetweenLine12,
+              ),
               Text(
                 task?.note ?? '',
                 style: const TextStyle(

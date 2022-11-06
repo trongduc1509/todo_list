@@ -9,7 +9,8 @@ class TaskInfoBloc extends Bloc<TaskInfoEvent, TaskInfoState> {
     on<TaskInfoLoadEvent>(_taskInfoLoad);
     on<TaskInfoUpdateEvent>(_taskInfoUpdate);
     on<TaskInfoDeleteEvent>(_taskInfoDelete);
-    on<TaskInfoUpdateStartTimeFieldEvent>(_taskInfoUpdateStartTimeField);
+    on<TaskInfoDataFilledEvent>(_taskInfoDataFilled);
+    on<TaskInfoUpdateFieldEvent>(_taskInfoUpdateField);
     if (initialState.inititalId != null) {
       add(TaskInfoLoadEvent(taskId: state.inititalId!));
     }
@@ -34,6 +35,7 @@ class TaskInfoBloc extends Bloc<TaskInfoEvent, TaskInfoState> {
       selectedDueTime: detailTask.dueTime,
       isLoading: false,
     ));
+    add(TaskInfoDataFilledEvent());
   }
 
   void _taskInfoUpdate(TaskInfoUpdateEvent event, emit) async {
@@ -42,18 +44,27 @@ class TaskInfoBloc extends Bloc<TaskInfoEvent, TaskInfoState> {
     var updatedTask = await taskdb.updateTask(event.updateTask);
 
     emit(state.copyWith(
+      detail: event.updateTask,
+      tempTitle: event.updateTask.title,
+      tempNote: event.updateTask.note,
+      selectedDueTime: event.updateTask.dueTime,
       isCreating: false,
     ));
   }
 
   void _taskInfoDelete(TaskInfoDeleteEvent event, emit) {}
 
-  void _taskInfoUpdateStartTimeField(
-      TaskInfoUpdateStartTimeFieldEvent event, emit) {
+  void _taskInfoUpdateField(TaskInfoUpdateFieldEvent event, emit) {
     emit(state.copyWith(
       tempTitle: event.tempTitle,
       tempNote: event.tempNote,
       selectedDueTime: event.newTime,
+    ));
+  }
+
+  void _taskInfoDataFilled(TaskInfoDataFilledEvent event, emit) {
+    emit(state.copyWith(
+      dataFilled: !state.dataFilled,
     ));
   }
 }
